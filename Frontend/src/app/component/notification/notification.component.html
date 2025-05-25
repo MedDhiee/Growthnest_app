@@ -1,0 +1,15 @@
+<!-- notification.component.html -->
+<div class="notification-container">
+    <div class="public-message">
+      <h3>Public Notification</h3>
+      <textarea [(ngModel)]="publicMessage" placeholder="Enter public message"></textarea>
+      <button (click)="sendPublicMessage()">Send to All</button>
+    </div>
+  
+    <div class="private-message">
+      <h3>Private Notification</h3>
+      <input type="text" [(ngModel)]="recipient" placeholder="Recipient username">
+      <textarea [(ngModel)]="privateMessage" placeholder="Enter private message"></textarea>
+      <button (click)="sendPrivateMessage()">Send Privately</button>
+    </div>
+  </div>

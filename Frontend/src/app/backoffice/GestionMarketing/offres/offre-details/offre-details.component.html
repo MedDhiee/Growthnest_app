@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ card.nom }}</h4>
+  <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+  <p><strong>Type:</strong> {{ card.typeOffre }}</p>
+  <p><strong>Description:</strong> {{ card.description }}</p>
+  <p><strong>Price:</strong> {{ formatPrice(card.prix) }}</p>
+
+  <!-- Afficher l'email si l'utilisateur n'est pas MarketingAgent -->
+  <p *ngIf="!isMarketingAgent"><strong>Created by:</strong> {{ card.createdBy }}</p>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-primary" (click)="activeModal.close()">Close</button>
+</div>

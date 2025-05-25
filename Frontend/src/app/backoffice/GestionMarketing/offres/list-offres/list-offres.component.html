@@ -1,0 +1,78 @@
+<div class="row mb-4">
+  <!-- Filtre par nom -->
+  <div class="col-md-6">
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="bi bi-search"></i>
+      </span>
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Filtrer par nom..." 
+        [(ngModel)]="searchTerm"
+      >
+    </div>
+  </div>
+
+  <!-- Filtre par type -->
+  <div class="col-md-6">
+    <select 
+      class="form-select" 
+      [(ngModel)]="selectedType"
+    >
+      <option value="">Tous les types</option>
+      <option *ngFor="let type of uniqueTypes" [value]="type">
+        {{ type }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<!-- Liste des cartes filtrées -->
+<div class="row">
+  <div class="col-lg-3 col-md-6 mb-4" *ngFor="let card of filteredCards">
+    <div class="card h-100 shadow-sm">
+      <div class="card-header bg-primary text-white d-flex justify-content-between">
+        <div>
+          <h5 class="card-title mb-0">{{ card.nom }}
+            <i class="bi bi-cart-plus ms-2" style="cursor: pointer;" (click)="confirmOrder(card)"></i>
+          </h5>
+          <span class="badge bg-light text-dark">{{ card.typeOffre }}</span>
+        </div>
+        <div class="action-icons"*ngIf="userRole === 'MarketingAgent'">
+          <i class="bi bi-pencil-square mx-2" (click)="editCard(card)"></i>
+          <i class="bi bi-trash" *ngIf="card.id !== undefined" (click)="deleteCard(card.id)"></i>
+        </div>
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="card-text flex-grow-1">
+          {{ card.description.length > 100 ? (card.description | slice:0:100) + '...' : card.description }}
+        </p>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <span class="h5 mb-0">{{ formatPrice(card.prix) }}</span>
+          <button class="btn btn-outline-primary btn-sm" (click)="showDetails(card)">
+            {{ card.description.length > 100 ? 'Read More' : 'Details' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Message si aucun résultat -->
+<div *ngIf="filteredCards.length === 0" class="alert alert-info">
+  Aucune offre ne correspond à vos critères de recherche.
+</div>
+<ng-template #orderConfirmationModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Order Confirmation</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    Are you sure you want to order "{{ selectedCard?.nom }}" for {{ selectedCard ? formatPrice(selectedCard.prix) : '' }}?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="placeOrder(); modal.close()">Confirm Order</button>
+  </div>
+</ng-template>

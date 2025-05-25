@@ -1,0 +1,47 @@
+<div class="mailbox-container">
+  <!-- Écran de connexion -->
+  <div *ngIf="!mailService.currentAccount.value" class="login-screen">
+    <div class="card">
+      <div class="card-body text-center">
+        <img src="assets/gmail-logo.png" alt="Gmail" width="120" class="mb-4">
+        <h4>Connectez votre compte Gmail</h4>
+        <p>Pour accéder à votre boîte mail intégrée</p>
+        
+        <button (click)="connectGmail()" class="btn btn-danger mt-3">
+          <i class="bi bi-google me-2"></i> Se connecter avec Google
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interface mail après connexion -->
+  <div *ngIf="mailService.currentAccount.value" class="mail-interface">
+    <!-- Header -->
+    <div class="mail-header">
+      <div class="account-info">
+        <img [src]="mailService.currentAccount.value.picture || 'assets/default-avatar.png'" 
+             class="avatar" alt="Profile">
+        <span>{{ mailService.currentAccount.value.email }}</span>
+      </div>
+      <button (click)="logout()" class="btn btn-outline-danger btn-sm">
+        Déconnexion
+      </button>
+    </div>
+
+    <!-- Interface mail principale -->
+    <div class="mail-main">
+      <div class="mail-sidebar">
+        <!-- Menu -->
+      </div>
+      
+      <div class="mail-content">
+        <!-- Liste des emails -->
+        <div *ngFor="let mail of mailService.mails.value" class="mail-item">
+          <div class="mail-from">{{ mail.from }}</div>
+          <div class="mail-subject">{{ mail.subject }}</div>
+          <div class="mail-snippet">{{ mail.snippet }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

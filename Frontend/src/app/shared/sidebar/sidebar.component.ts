@@ -4,7 +4,7 @@ import { RouteInfo } from './sidebar.metadata';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule, NgIf } from '@angular/common';
-//declare var $: any;
+import { Message, NotificationService } from '../../services/GestionMarketingServices/NotificationService.service';  
 
 @Component({
   selector: 'app-sidebar',
@@ -15,6 +15,8 @@ import { CommonModule, NgIf } from '@angular/common';
 export class SidebarComponent implements OnInit {
   showMenu = '';
   showSubMenu = '';
+  unreadCount: number = 0;
+  notifications: any[] = [];
   public sidebarnavItems:RouteInfo[]=[];
   // this is for the open close
   addExpandClass(element: string) {
@@ -28,11 +30,24 @@ export class SidebarComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private notificationService: NotificationService
   ) {}
 
-  // End open close
-  ngOnInit() {
+  ngOnInit(): void {
     this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
+    const currentUserData = localStorage.getItem('auth_user') || '';
+    const currentUser = JSON.parse(currentUserData);
+    const userEmail = currentUser.email;
+    this.notificationService.fetchStoredNotifications(userEmail).subscribe(data => {
+      this.notifications = data;
+      this.unreadCount = data.filter(msg => !msg.read).length;
+    });
+  
+    this.notificationService.getMessages().subscribe((msg: Message) => {
+      this.notifications.unshift(msg);
+      this.unreadCount++; // Nouveau message = +1 non lu
+    });
   }
+  
 }

@@ -5,13 +5,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsRoutes } from './component.routing';
-import { NgbdpaginationBasicComponent } from './pagination/pagination.component';
-import { NgbdAlertBasicComponent } from './alert/alert.component';
-import { NgbdDropdownBasicComponent } from './dropdown-collapse/dropdown-collapse.component';
-import { NgbdnavBasicComponent } from './nav/nav.component';
-import { NgbdButtonsComponent } from './buttons/buttons.component';
-import { CardsComponent } from './card/card.component';
-import { TableComponent } from "./table/table.component";
+
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { AuthService } from '../services/Auth/auth.service';
+import { TokenService } from '../services/Auth/token.service';
+import { AuthGuard } from '../guards/auth.guard';
+import { RoleGuard } from '../guards/role.guard';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from '../interceptors/auth.interceptor';
+import { AuthComponent } from './auth/auth.component';
+import { NotificationComponent } from './notification/notification.component';
+import { NotificationDisplayComponent } from './notification-display/notification-display.component';
 
 @NgModule({
   imports: [
@@ -20,13 +25,29 @@ import { TableComponent } from "./table/table.component";
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    NgbdpaginationBasicComponent,
-    NgbdAlertBasicComponent,
-    NgbdDropdownBasicComponent,
-    NgbdnavBasicComponent,
-    NgbdButtonsComponent,
-    CardsComponent,
-    TableComponent
+    HttpClientModule,
   ],
+  declarations: [
+    LoginComponent,
+    RegisterComponent,
+    AuthComponent,
+    NotificationComponent,
+    NotificationDisplayComponent
+  ],
+  providers: [
+    AuthService,
+    TokenService,
+    AuthGuard,
+    RoleGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
+  exports: [
+    LoginComponent,
+    RegisterComponent
+  ]
 })
 export class ComponentsModule { }

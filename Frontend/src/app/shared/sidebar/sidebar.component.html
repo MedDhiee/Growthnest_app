@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0&icon_names=edit_notifications" />
 <nav class="sidebar-nav">
     <ul id="sidebarnav">
         <!-- First level menu -->
@@ -8,11 +9,14 @@
                 [ngClass]="[sidebarnavItem.class]" *ngIf="!sidebarnavItem.extralink;" (click)="addExpandClass(sidebarnavItem.title)"
                 [routerLinkActive]="sidebarnavItem.submenu.length != 0 ? '' : 'active'">
                 <i [ngClass]="[sidebarnavItem.icon]"></i>
-                <span class="hide-menu">{{sidebarnavItem.title}}</span>
+                <span class="hide-menu">{{sidebarnavItem.title}}
+                    <span *ngIf="sidebarnavItem.title === 'Notification' && unreadCount > 0" 
+                        style="background-color: red; color: white; border-radius: 50%; font-size: 12px; margin-left: 8px; font-weight: bold; display: inline-block; min-width: 20px; text-align: center;">
+                        {{ unreadCount }}
+                  </span>
+                </span>
             </a>
         </li>
-        <li class="text-center p-3 upgrade-btn">
-            <a href="https://www.wrappixel.com/templates/elite-angular-admin/" class="btn d-block w-100 btn-danger">Upgrade to Pro</a>
-        </li>
+        
     </ul>
 </nav>

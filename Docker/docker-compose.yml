@@ -1,0 +1,49 @@
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "Med123456*"
+      MYSQL_DATABASE: "growthnest"
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_growthnest_data:/var/lib/mysql
+
+
+  backend:
+    build:
+      context: ..
+      dockerfile: Docker/back/Dockerfile
+    container_name: growthnest-backend
+
+    ports:
+      - "8089:8089"
+    networks:
+      - app-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/growthnest
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: 
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: Docker/front/Dockerfile
+    container_name: growthnest-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - app-net
+
+networks:
+  app-net:
+  
+volumes:
+  mysql_growthnest_data:
+    driver: local

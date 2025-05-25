@@ -1,0 +1,66 @@
+<div class="notification-wrapper">
+  <h3>Notifications</h3>
+  <button class="btn btn-primary mb-2" (click)="markAllAsRead()">Marquer tout comme lu</button>
+  <ul class="list-group">
+    <li *ngFor="let notif of notifications" class="list-group-item"
+        [class.list-group-item-secondary]="!notif.read">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          {{ notif.text }} — {{ notif.createdAt | date:'short' }}
+        </div>
+        <button *ngIf="userRole === 'MarketingAgent'" 
+                class="btn btn-sm btn-success ms-2"
+                (click)="openContractForm(notif)">
+          Générer Contrat
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<ng-template #contractModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Générer un Contrat</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="contractForm" (ngSubmit)="generateContract(modal)">
+          <div class="mb-3">
+            <label for="clientName" class="form-label">Nom du Client</label>
+            <input type="text" class="form-control" id="clientName" formControlName="clientName" required>
+          </div>
+          <div class="mb-3">
+            <label for="contractType" class="form-label">Type de Contrat</label>
+            <select class="form-select" id="contractType" formControlName="contractType" required>
+              <option value="">Sélectionner un type</option>
+              <option value="standard">Standard</option>
+              <option value="premium">Premium</option>
+              <option value="entreprise">Entreprise</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="startDate" class="form-label">Date de Début</label>
+            <input type="date" class="form-control" id="startDate" formControlName="startDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="duration" class="form-label">Durée (mois)</label>
+            <input type="number" class="form-control" id="duration" formControlName="duration" required>
+          </div>
+          <div class="mb-3">
+            <label for="terms" class="form-label">Conditions Spéciales</label>
+            <textarea class="form-control" id="terms" formControlName="terms" rows="3"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!contractForm.valid">Générer</button>
+          </div>
+        
+      
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!contractForm.valid">Générer</button>
+    </div>
+  </form>
+</div>
+</ng-template>

@@ -1,0 +1,16 @@
+<div class="auth-container">
+    <div class="marketing-side">
+      <div class="marketing-content">
+        <h1>Boostez Votre Marketing</h1>
+        <p>Découvrez notre plateforme tout-en-un pour maximiser vos campagnes marketing</p>
+        <img src="assets/images/bg/marketing_bg.jpg" alt="Marketing Platform">
+      </div>
+    </div>
+    
+    <div class="form-side">
+      <div class="form-container" [@formAnimation]="isLogin ? 'login' : 'register'">
+        <app-login *ngIf="isLogin" (switchToRegister)="switchToRegister()"></app-login>
+        <app-register *ngIf="!isLogin" (switchToLogin)="switchToLogin()"></app-register>
+      </div>
+    </div>
+  </div>

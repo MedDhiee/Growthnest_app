@@ -1,0 +1,64 @@
+/* card.component.css or global styles */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header {
+    border-bottom: none;
+    padding: 1rem 1.25rem;
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+ /* Style for action icons */
+ .action-icons {
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  .bi .bi-pencil-square {
+    color: #fff;
+    transition: color 0.2s;
+  }
+  
+  .bi-pencil-square:hover {
+    color: #ffc107; /* Yellow on hover */
+  }
+  
+  .bi-trash {
+    color: #fff;
+    transition: color 0.2s;
+  }
+  
+  .bi-trash:hover {
+    color: #dc3545; /* Red on hover */
+  }
+
+.input-group-text {
+  background-color: #f8f9fa;
+}
+
+.form-select, .form-control {
+  border-radius: 0.25rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.alert {
+  margin-top: 1rem;
+}
+ 

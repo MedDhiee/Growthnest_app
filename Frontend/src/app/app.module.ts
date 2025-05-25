@@ -21,10 +21,21 @@ import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
 
+
+import { ListOffresComponent } from './backoffice/GestionMarketing/offres/list-offres/list-offres.component';
+import { OffreDetailsComponent } from './backoffice/GestionMarketing/offres/offre-details/offre-details.component';
+import { MailingComponent } from './backoffice/GestionMarketing/mailing/mailing/mailing.component';
+import { EditOffreModalComponent } from './backoffice/GestionMarketing/offres/edit-offre-modal/edit-offre-modal.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     SpinnerComponent,
+    ListOffresComponent,
+    OffreDetailsComponent,
+    MailingComponent,
+    EditOffreModalComponent,
+    
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,7 @@
 import { Component, AfterViewInit, EventEmitter, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'src/app/services/Auth/auth.service';
 
 declare var $: any;
 
@@ -14,7 +16,10 @@ export class NavigationComponent implements AfterViewInit {
 
   public showSearch = false;
 
-  constructor(private modalService: NgbModal) {
+  constructor(private modalService: NgbModal,
+    private authService: AuthService, // Ajouté
+    private router: Router
+  ) {
   }
 
   // This is for Notifications
@@ -109,6 +114,9 @@ export class NavigationComponent implements AfterViewInit {
     code: 'de',
     icon: 'de'
   }]
-
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/auth']);
+  }
   ngAfterViewInit() { }
 }

@@ -1,0 +1,47 @@
+<div class="gestion-marketing-page">
+    
+  
+    <div class="forms-container">
+
+      <div class="card offre-card">
+        <div class="card-header">
+          <h2 class="form-title">📦 New Marketing Offer</h2>
+          <p class="form-subtitle">Create a complete offer to propose to business owners.</p>
+        </div>
+        <form [formGroup]="formOffre" (ngSubmit)="submitOffre()">
+          <label>Offer name</label>
+          <input
+            type="text"
+            formControlName="nom"
+            class="input"
+            placeholder="e.g. Social Media Visibility Pack"
+          />
+  
+          <label>  Description</label>
+          <textarea
+            formControlName="description"
+            class="input"
+            rows="3"
+            placeholder="Detailed description..."
+          ></textarea>
+  
+          <label>  Price </label>
+          <input type="number" formControlName="prix" class="input" />
+  
+          <label> Offer type</label>
+            <input 
+              list="offerTypes" 
+              formControlName="typeOffre" 
+              class="input" 
+              placeholder="Type or select..."
+            />
+            <datalist id="offerTypes">
+              <option *ngFor="let type of existingTypes" [value]="type">{{ type }}</option>
+          </datalist>
+  
+          <button type="submit" class="btn btn-green">Publish</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
