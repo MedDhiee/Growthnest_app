@@ -1,0 +1,40 @@
+pipeline {
+  agent any
+
+  environment {
+    DOCKER_HUB_CREDENTIALS = credentials('dockerhub')
+    DOCKER_IMAGE_NAME = "yourdockerhubusername/growthnest-backend"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/MedDhiee/Growthnest_app.git'
+      }
+    }
+
+    stage('Build & Package Backend') {
+      steps {
+        dir('Backend') {
+          // Pour Node.js
+          sh 'npm install'
+          // Pour Java Spring Boot, utiliser : sh './mvnw clean package'
+        }
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -f Docker/backend.Dockerfile -t $DOCKER_IMAGE_NAME .'
+      }
+    }
+
+    stage('Push to DockerHub') {
+      steps {
+        withDockerRegistry([credentialsId: 'dockerhub', url: '']) {
+          sh 'docker push $DOCKER_IMAGE_NAME'
+        }
+      }
+    }
+  }
+}
