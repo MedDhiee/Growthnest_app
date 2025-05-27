@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f4b922bf50199b0d811eebf90c9ec26fdca2d6cd12445973bd289c9bc35915c9
-size 808
+pipeline {
+  agent any
+
+  environment {
+    DOCKER_IMAGE_NAME = "meddhia07/growthnest-frontend"
+  }
+
+  stages {
+    stage('Install Dependencies') {
+  steps {
+    dir('Frontend') {
+      sh 'rm -rf node_modules package-lock.json'
+      sh 'npm install'
+    }
+  }
+}
+
+stage('Build Angular App') {
+  steps {
+    dir('Frontend') {
+      sh 'chmod +x node_modules/.bin/ng'
+      sh 'npx ng build --configuration production'
+    }
+  }
+}
+
+
+
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -f Docker/frontend.Dockerfile -t $DOCKER_IMAGE_NAME .'
+      }
+    }
+
+    stage('Push to DockerHub') {
+      steps {
+        withDockerRegistry([credentialsId: 'dockerhub', url: '']) {
+          sh 'docker push $DOCKER_IMAGE_NAME'
+        }
+      }
+    }
+  }
+}
