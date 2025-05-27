@@ -8,30 +8,33 @@ pipeline {
   stages {
 
     stage('Check Versions') {
-      steps {
-        dir('Frontend') {
-          sh 'node -v'
-          sh 'npx ng version'
-        }
-      }
+  steps {
+    dir('Frontend') {
+      sh 'node -v'
+      // Rendre executable les binaires locaux
+      sh 'chmod +x node_modules/.bin/ng || true'
+      sh 'npx ng version'
     }
+  }
+}
 
-    stage('Install Dependencies') {
-      steps {
-        dir('Frontend') {
-          // NE PAS supprimer package-lock.json
-          sh 'npm ci' // plus rapide et fiable que npm install
-        }
-      }
+stage('Install Dependencies') {
+  steps {
+    dir('Frontend') {
+      sh 'npm ci'
     }
+  }
+}
 
-    stage('Build Angular App') {
-      steps {
-        dir('Frontend') {
-          sh 'npx ng build --configuration production'
-        }
-      }
+stage('Build Angular App') {
+  steps {
+    dir('Frontend') {
+      sh 'chmod +x node_modules/.bin/ng || true'
+      sh 'npx ng build --configuration production'
     }
+  }
+}
+
 
     stage('Build Docker Image') {
       steps {
