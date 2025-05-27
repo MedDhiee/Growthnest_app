@@ -19,12 +19,17 @@ pipeline {
 }
 
 stage('Install Dependencies') {
-  steps {
-    dir('Frontend') {
-      sh 'npm ci'
+    steps {
+        dir('Frontend') {
+            sh '''
+                rm -rf node_modules
+                npm cache clean --force
+                npm ci
+            '''
+        }
     }
-  }
 }
+
 
 stage('Build Angular App') {
   steps {
