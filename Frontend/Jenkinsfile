@@ -1,3 +1,50 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8476f68ed4f031de879ee272bd856dcd6a5173bd65d92e62da8c5c71bf9bd29f
-size 960
+pipeline {
+  agent any
+
+  environment {
+    DOCKER_IMAGE_NAME = "meddhia07/growthnest-frontend"
+  }
+
+  stages {
+
+    stage('Check Versions') {
+      steps {
+        dir('Frontend') {
+          sh 'node -v'
+          sh 'npx ng version'
+        }
+      }
+    }
+
+    stage('Install Dependencies') {
+      steps {
+        dir('Frontend') {
+          // NE PAS supprimer package-lock.json
+          sh 'npm ci' // plus rapide et fiable que npm install
+        }
+      }
+    }
+
+    stage('Build Angular App') {
+      steps {
+        dir('Frontend') {
+          sh 'npx ng build --configuration production'
+        }
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -f Docker/frontend.Dockerfile -t $DOCKER_IMAGE_NAME .'
+      }
+    }
+
+    stage('Push to DockerHub') {
+      steps {
+        withDockerRegistry([credentialsId: 'dockerhub', url: '']) {
+          sh 'docker push $DOCKER_IMAGE_NAME'
+        }
+      }
+    }
+  }
+}
