@@ -1,5 +1,9 @@
 pipeline {
-  agent any
+  agent {
+        docker {
+          image 'node:10.11.0-alpine'
+        }
+     }
 
   environment {
     DOCKER_IMAGE_NAME = "meddhia07/growthnest-frontend"
