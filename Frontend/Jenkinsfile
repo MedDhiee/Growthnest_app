@@ -1,10 +1,10 @@
 pipeline {
   agent {
     docker {
-        image 'node:18.18.0-alpine' // ou 'node:20-alpine'
-        args '-u root:root' // pour éviter les permissions
+      image 'node:18.18.0-alpine' // ou 'node:20-alpine' si besoin
+      args '-u root:root' // pour éviter les erreurs de permissions
     }
-}
+  }
 
   environment {
     DOCKER_IMAGE_NAME = "meddhia07/growthnest-frontend"
@@ -12,39 +12,34 @@ pipeline {
 
   stages {
 
-    stage('Check Versions') {
-  steps {
-    dir('Frontend') {
-      sh 'node -v'
-      // Rendre executable les binaires locaux
-      sh 'chmod +x node_modules/.bin/ng || true'
-      sh 'npx ng version'
-    }
-  }
-}
-
-stage('Install Dependencies') {
-    steps {
+    stage('Install Dependencies') {
+      steps {
         dir('Frontend') {
-            sh '''
-                rm -rf node_modules
-                npm cache clean --force
-                npm ci
-            '''
+          sh '''
+            rm -rf node_modules
+            npm cache clean --force
+            npm ci
+          '''
         }
+      }
     }
-}
 
-
-stage('Build Angular App') {
-  steps {
-    dir('Frontend') {
-      sh 'chmod +x node_modules/.bin/ng || true'
-      sh 'npx ng build --configuration production'
+    stage('Check Versions') {
+      steps {
+        dir('Frontend') {
+          sh 'node -v'
+          sh 'npx ng version'
+        }
+      }
     }
-  }
-}
 
+    stage('Build Angular App') {
+      steps {
+        dir('Frontend') {
+          sh 'npx ng build --configuration production'
+        }
+      }
+    }
 
     stage('Build Docker Image') {
       steps {
